@@ -11,6 +11,7 @@ import org.jfree.data.general.DefaultPieDataset;
 public class GraficaPie extends JFrame {
 
     public GraficaPie() {
+        //Inicializando la ventana y dándole dimensiones
         GraficaPieP graficaPieP = new GraficaPieP();
         this.setBounds(400, 170, 800, 600);
         this.setTitle("Gráfica de sexo");
@@ -31,16 +32,19 @@ final class GraficaPieP extends JPanel implements WindowListener {
         initComponents();
     }
 
+    //Aquí irá las dimensiones y colores de los componentes
     public void estetica() {
         this.setLayout(null);
         this.setBackground(Color.YELLOW);
     }
 
+    //Aquí inicializamos los componentes
     public void initComponents() {
         cantidad(CargaMasiva.alumnos);
         grafica();
     }
 
+    //Método para saber la cantidad de mujeres y hombres de alumnos
     public void cantidad(Alumno[] alumnos) {
         for (Alumno alumno : alumnos) {
             if (alumno != null) {
@@ -53,6 +57,7 @@ final class GraficaPieP extends JPanel implements WindowListener {
         }
     }
     
+    //aquí creamos la gráfica de pie y le damos dimensiones
     public void grafica(){
         DefaultPieDataset datos = new DefaultPieDataset();
         datos.setValue("Masculino", nMasculino);
@@ -65,7 +70,8 @@ final class GraficaPieP extends JPanel implements WindowListener {
         this.add(panelG, BorderLayout.NORTH);
         
     }
-
+    
+    //aquí implementamos los métodos de la interfaz de WindowListener
     @Override
     public void windowOpened(WindowEvent e) {
     }
@@ -76,6 +82,7 @@ final class GraficaPieP extends JPanel implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent e) {
+        //Aquí se abre la anterior ventana cuando se cierra la actual.
         VentanaPrincipalP.ventanaGrafica.setVisible(true);
     }
 

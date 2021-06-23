@@ -1,5 +1,8 @@
 package interfazGrafica;
 
+import java.awt.Dimension;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class GraficaBarras {
@@ -42,6 +45,13 @@ public class GraficaBarras {
             datos.setValue(n10, "91-100 años", "91-100");
         }
 
+        JFreeChart grafica = ChartFactory.createBarChart("Edad de estudiantes", 
+                "Edad", "Estudiantes", datos, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel panelG = new ChartPanel(grafica);
+        panelG.setMouseWheelEnabled(true);
+        panelG.setPreferredSize(new Dimension(700,500));
+        //this.setLayout(new BorderLayout());
+        //this.add(panelG, BorderLayout.NORTH);
     }
 
 }

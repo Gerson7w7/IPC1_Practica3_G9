@@ -9,6 +9,7 @@ import main.Main;
 public class VentanaGrafica extends JFrame {
 
     public VentanaGrafica() {
+        //Inicializando la ventana y dándole dimensiones
         VentanaGraficaP ventanaGraficaP = new VentanaGraficaP();
         this.setBounds(400, 170, 430, 275);
         this.setTitle("Menú de gráficas");
@@ -31,6 +32,7 @@ final class VentanaGraficaP extends JPanel implements ActionListener, WindowList
         initComponents();
     }
 
+    //Aquí irá las dimensiones y colores de los componentes
     public void estetica() {
         this.setLayout(null);
         labelG.setBounds(120, 10, 500, 35);
@@ -41,6 +43,7 @@ final class VentanaGraficaP extends JPanel implements ActionListener, WindowList
         this.setBackground(Color.YELLOW);
     }
 
+    //Aquí inicializamos los componentes y los añadimos al panel
     public void initComponents() {
         this.add(labelG);
         this.add(bGSexo);
@@ -53,6 +56,8 @@ final class VentanaGraficaP extends JPanel implements ActionListener, WindowList
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //Si se han cargado los archivos correctamente se podrá graficar
+        //de lo contrario saldrá un cuadro de diálogo mostrando un error.
         if (CargaMasiva.alumnos != null && CargaMasiva.cursos != null && CargaMasiva.notas != null) {
             if (e.getSource() == bGSexo) {
                 graficaPie = new GraficaPie();
@@ -70,6 +75,7 @@ final class VentanaGraficaP extends JPanel implements ActionListener, WindowList
         }
     }
 
+     //aquí implementamos los métodos de la interfaz de WindowListener
     @Override
     public void windowOpened(WindowEvent e) {
     }

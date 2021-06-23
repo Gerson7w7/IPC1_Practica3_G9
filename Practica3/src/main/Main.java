@@ -9,6 +9,7 @@ public class Main {
     
     public static void main(String[] args) {
         ventanaPrincipal = new VentanaPrincipal();
+        //Cuando se cierre esta ventana se terminará el programa
         ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

@@ -9,6 +9,7 @@ import main.*;
 public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal() {
+        //Inicializando la ventana y dándole dimensiones
         this.setBounds(400, 170, 520, 275);
         this.setTitle("Administración de alumnos");
         this.setVisible(true);
@@ -29,6 +30,7 @@ final class VentanaPrincipalP extends JPanel implements ActionListener {
         initComponents();
     }
 
+    //Aquí irá las dimensiones y colores de los componentes
     public void estetica() {
         this.setLayout(null);
         bienvenida.setBounds(120, 10, 500, 35);
@@ -38,6 +40,7 @@ final class VentanaPrincipalP extends JPanel implements ActionListener {
         bienvenida.setFont(new Font("bienvenida", Font.ROMAN_BASELINE, 30));
     }
 
+    //Aquí inicializamos los componentes y los añadimos al panel
     public void initComponents() {
         this.add(bienvenida);
         this.add(bCargarDatos);
