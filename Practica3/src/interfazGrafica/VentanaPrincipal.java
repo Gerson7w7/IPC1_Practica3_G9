@@ -17,7 +17,9 @@ public class VentanaPrincipal extends JFrame {
 }
 
 final class VentanaPrincipalP extends JPanel implements ActionListener {
+
     public static VentanaCM ventanaCM;
+    public static VentanaGrafica ventanaGrafica;
     JLabel bienvenida = new JLabel("¿Qué desea relizar?");
     JButton bCargarDatos = new JButton("Cargar datos");
     JButton bGraficas = new JButton("Realizar gráficas");
@@ -41,17 +43,21 @@ final class VentanaPrincipalP extends JPanel implements ActionListener {
         this.add(bCargarDatos);
         this.add(bGraficas);
         bCargarDatos.addActionListener(this);
-        
+        bGraficas.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == bCargarDatos) {
+        if (e.getSource() == bCargarDatos){
             ventanaCM = new VentanaCM();
             Main.ventanaPrincipal.dispose();
             ventanaCM.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        } else {
-
+        }else{
+            ventanaGrafica = new VentanaGrafica();
+            Main.ventanaPrincipal.dispose();
+            ventanaGrafica.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
     }
+
+    
 }

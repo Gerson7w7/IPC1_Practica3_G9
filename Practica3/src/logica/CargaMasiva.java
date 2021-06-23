@@ -13,21 +13,21 @@ public class CargaMasiva {
     public static Curso[] cursos;
     public static Nota[] notas;
     public static Scanner scanner = new Scanner(System.in);
+    public static boolean archivoB = true;
+    public int contador = 0;
 
     public CargaMasiva() {
-        alumnos = new Alumno[200];
-        cursos = new Curso[200];
-        notas = new Nota[200];
+        alumnos = new Alumno[0];
+        cursos = new Curso[0];
+        notas = new Nota[0];
     }
 
-    private String cargaDatos() {
+    public String cargaDatos(String ruta) {
+        contador = 0;
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            System.out.println("Ingrese el nombre del archivo: ");
-            String ruta = scanner.nextLine();
-            //Leyendo el csv
             archivo = new File(ruta);
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
@@ -35,11 +35,16 @@ public class CargaMasiva {
             String content = "";
             String linea;
             while ((linea = br.readLine()) != null) {
-                //linea = linea.replaceAll(" ", "");
+                linea = linea.replaceAll(" ", "");
                 content += linea + "\n";
+                //POSIBLE CONTADOR PARA LOS ARREGLOS
+                contador++;        
             }
+            cantidadDatos();
+            archivoB = true;
             return content;
         } catch (FileNotFoundException e) {
+            archivoB = false;
             System.out.println("Archivo no encontrado");
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,8 +59,18 @@ public class CargaMasiva {
         }
         return "";
     }
+    
+    private void cantidadDatos(){
+        if(alumnos.length == 0){
+            alumnos = new Alumno[contador];
+        }else if(cursos.length == 0){
+            cursos = new Curso[contador];
+        }else if(notas.length == 0){
+            notas = new Nota[contador];
+        }
+    }
 
-    private void cargaAlumnos(String content) {
+    public void cargaAlumnos(String content) {
         //Partiendo cada dato por medio de punto y coma (;)
         String filas[] = content.split("\n");
         String[] columnas = filas[0].split(",");
@@ -128,7 +143,7 @@ public class CargaMasiva {
         System.out.println("Los alumnos han sido cargado con éxito :D");
     }
 
-    private void cargaCursos(String content) {
+    public void cargaCursos(String content) {
         //Partiendo cada dato por medio de punto y coma (;)
         String filas[] = content.split("\n");
         String[] columnas = filas[0].split(",");
@@ -187,8 +202,8 @@ public class CargaMasiva {
         }
         System.out.println("Los cursos han sido cargado con éxito :D");
     }
-    
-    private void cargaNotas(String content) {
+
+    public void cargaNotas(String content) {
 
         //Partiendo cada dato por medio de punto y coma (;)
         String filas[] = content.split("\n");

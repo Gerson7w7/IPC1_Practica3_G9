@@ -1,11 +1,9 @@
 package interfazGrafica;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import javax.swing.*;
+import logica.*;
 import main.*;
 
 public class VentanaCM extends JFrame {
@@ -17,7 +15,6 @@ public class VentanaCM extends JFrame {
         this.setVisible(true);
         this.add(ventanaCMP);
         this.addWindowListener(ventanaCMP);
-        
     }
 }
 
@@ -26,8 +23,10 @@ final class VentanaCMP extends JPanel implements ActionListener, WindowListener 
     JLabel labelCM = new JLabel("CARGA DE DATOS");
     JLabel labelCMInfo = new JLabel("Ingrese la ruta de la carpeta donde se encuentran sus archivos:");
     JButton bCargarDatos = new JButton("Cargar datos");
-    JTextField ruta = new JTextField();
+    JTextField ruta = new JTextField("");
+    JLabel labelError = new JLabel("No se ha encontrado la ruta de los archivos :(");
     JLabel labelExito = new JLabel("Los archivos han sido cargados! :D");
+    CargaMasiva cargaMasiva = new CargaMasiva();
 
     public VentanaCMP() {
         estetica();
@@ -42,8 +41,9 @@ final class VentanaCMP extends JPanel implements ActionListener, WindowListener 
         bCargarDatos.setBounds(220, 175, 150, 30);
         ruta.setBounds(20, 100, 300, 20);
         this.setBackground(Color.LIGHT_GRAY);
+        labelError.setBounds(100, 125, 300, 30);
         labelExito.setBounds(100, 125, 200, 30);
-        
+
     }
 
     public void initComponents() {
@@ -51,14 +51,32 @@ final class VentanaCMP extends JPanel implements ActionListener, WindowListener 
         this.add(labelCMInfo);
         this.add(bCargarDatos);
         this.add(ruta);
+        this.add(labelError);
         this.add(labelExito);
-        bCargarDatos.addActionListener(this);  
+        labelError.setVisible(false);
+        labelExito.setVisible(false);
+        bCargarDatos.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Hola");
-        
+
+            String datos = cargaMasiva.cargaDatos(ruta.getText() + "alumnos.csv");
+            cargaMasiva.cargaAlumnos(datos);
+
+            datos = cargaMasiva.cargaDatos(ruta.getText() + "cursos.csv");
+            cargaMasiva.cargaCursos(datos);
+
+            datos = cargaMasiva.cargaDatos(ruta.getText() + "asignaciones.csv");
+            cargaMasiva.cargaNotas(datos);
+
+            if (CargaMasiva.archivoB == true) {
+                labelError.setVisible(false);
+                labelExito.setVisible(true);
+            } else {
+                labelExito.setVisible(false);
+                labelError.setVisible(true);
+            }      
     }
 
     @Override
