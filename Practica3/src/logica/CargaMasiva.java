@@ -38,7 +38,7 @@ public class CargaMasiva {
                 linea = linea.replaceAll(" ", "");
                 content += linea + "\n";
                 //POSIBLE CONTADOR PARA LOS ARREGLOS
-                contador++;        
+                contador++;
             }
             cantidadDatos();
             archivoB = true;
@@ -59,13 +59,13 @@ public class CargaMasiva {
         }
         return "";
     }
-    
-    private void cantidadDatos(){
-        if(alumnos.length == 0){
+
+    private void cantidadDatos() {
+        if (alumnos.length == 0) {
             alumnos = new Alumno[contador];
-        }else if(cursos.length == 0){
+        } else if (cursos.length == 0) {
             cursos = new Curso[contador];
-        }else if(notas.length == 0){
+        } else if (notas.length == 0) {
             notas = new Nota[contador];
         }
     }
@@ -92,10 +92,7 @@ public class CargaMasiva {
                                     if (alumnos[k] != null) {
                                         if (alumnos[l] != null) {
                                             if (alumnos[k].getId() == alumnos[l].getId()) {
-//                                                 String log = "Fecha: " + fechaHoraActuales
-//                                                        + "\r\nEsta línea se ha cargado anteriormente: " + (l + 1) + "\r\n\r\n";
-//                                                addToEndFile("Logs.log", log);
-//                                                System.out.println("Hubo errores en la carga de archivos, revisar el log.");
+                                                System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                                                 alumnos[l] = null;
                                                 break;
                                             }
@@ -108,10 +105,7 @@ public class CargaMasiva {
                                     if (alumnos[k] != null) {
                                         if (alumnos[l] != null) {
                                             if (alumnos[k].getCarnet() == alumnos[l].getCarnet()) {
-//                                                String log = "Fecha: " + fechaHoraActuales
-//                                                        + "\r\nEsta línea se ha cargado anteriormente: " + (l + 1) + "\r\n\r\n";
-//                                                addToEndFile("Logs.log", log);
-//                                                System.out.println("Hubo errores en la carga de archivos, revisar el log.");
+                                                System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                                                 alumnos[l] = null;
                                                 break;
                                             }
@@ -123,21 +117,12 @@ public class CargaMasiva {
                         }
                     }
                 } else {
-//                    String log = "Fecha: " + fechaHoraActuales
-//                            + "\r\nSe escribió un género inexistente en la línea: " + i + ") " + filas[i] + "\r\n\r\n";
-//                    addToEndFile("Logs.log", log);
-//                    System.out.println("Hubo errores en la carga de archivos, revisar el log.");
+                    System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-//                 String log = "Fecha: " + fechaHoraActuales
-//                        + "\r\nNo se ha definido un género: " + i + ") " + filas[i] + "\r\n\r\n";
-//                addToEndFile("Logs.log", log);
-//                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
+                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
             } catch (NumberFormatException e) {
-//                String log = "Fecha: " + fechaHoraActuales
-//                        + "\r\nSe escribió una letra donde debería ir un número en la línea: " + i + ") " + filas[i] + "\r\n\r\n";
-//                addToEndFile("Logs.log", log);
-//                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
+                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
             }
         }
         System.out.println("Los alumnos han sido cargado con éxito :D");
@@ -163,10 +148,7 @@ public class CargaMasiva {
                                 if (cursos[k] != null) {
                                     if (cursos[l] != null) {
                                         if (cursos[k].getId() == cursos[l].getId()) {
-//                                            String log = "Fecha: " + fechaHoraActuales
-//                                                    + "\r\nEsta línea se ha cargado anteriormente: " + (l + 1) + "\r\n\r\n";
-//                                            addToEndFile("Logs.log", log);
-//                                            System.out.println("Hubo errores en la carga de archivos, revisar el log.");
+                                            System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                                             cursos[l] = null;
                                             break;
                                         }
@@ -179,10 +161,7 @@ public class CargaMasiva {
                                 if (cursos[k] != null) {
                                     if (cursos[l] != null) {
                                         if (cursos[k].getCodigo() == cursos[l].getCodigo()) {
-//                                             String log = "Fecha: " + fechaHoraActuales
-//                                                    + "\r\nEsta línea se ha cargado anteriormente: " + (l + 1) + "\r\n\r\n";
-//                                            addToEndFile("Logs.log", log);
-//                                            System.out.println("Hubo errores en la carga de archivos, revisar el log.");
+                                            System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                                             cursos[l] = null;
                                             break;
                                         }
@@ -194,10 +173,8 @@ public class CargaMasiva {
                     }
                 }
             } catch (NumberFormatException e) {
-//               String log = "Fecha: " + fechaHoraActuales
-//                        + "\r\nSe escribió una letra donde debería ir un número en la línea: " + i + ") " + filas[i] + "\r\n\r\n";
-//                addToEndFile("Logs.log", log);
-//                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
+
+                System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
             }
         }
         System.out.println("Los cursos han sido cargado con éxito :D");
@@ -225,9 +202,6 @@ public class CargaMasiva {
                                     if (notas[k] != null) {
                                         if (notas[l] != null) {
                                             if (notas[k].getIdAlumno() == notas[l].getIdAlumno() && notas[k].getIdCurso() == notas[l].getIdCurso()) {
-//                                                String log = "Fecha: " + fechaHoraActuales
-//                                                        + "\r\nEsta línea se ha cargado anteriormente: " + (l + 1) + "\r\n\r\n";
-//                                                addToEndFile("Logs.log", log);
                                                 System.out.println("Hubo errores en la carga de archivos, revisar el log.");
                                                 notas[l] = null;
                                                 break;
@@ -240,15 +214,9 @@ public class CargaMasiva {
                         }
                     }
                 } else {
-//                    String log = "Fecha: " + fechaHoraActuales
-//                            + "\r\nSe ingresó una nota fura de rango en la línea: " + i + ") " + filas[i] + "\r\n\r\n";
-//                    addToEndFile("Logs.log", log);
                     System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
                 }
             } catch (NumberFormatException e) {
-//                String log = "Fecha: " + fechaHoraActuales
-//                        + "\r\nSe escribió una letra donde debería ir un número en la línea: " + i + ") " + filas[i] + "\r\n\r\n";
-//                addToEndFile("Logs.log", log);
                 System.out.println("Hubo errores en la carga de archivos, revisar el log. ");
             }
         }

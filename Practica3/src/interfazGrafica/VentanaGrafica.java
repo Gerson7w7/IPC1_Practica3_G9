@@ -22,6 +22,8 @@ public class VentanaGrafica extends JFrame {
 final class VentanaGraficaP extends JPanel implements ActionListener, WindowListener {
 
     public static GraficaPie graficaPie;
+    public static VentanaGEdad ventanaGEdad; 
+    public static VentanaGNotas ventanaGNotas;
     JLabel labelG = new JLabel("GRÁFICAS");
     JButton bGSexo = new JButton("Gráfica por sexo");
     JButton bGEdad = new JButton("Gráfica por edad");
@@ -65,9 +67,13 @@ final class VentanaGraficaP extends JPanel implements ActionListener, WindowList
                 graficaPie.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
             } else if (e.getSource() == bGEdad) {
-
+                ventanaGEdad = new VentanaGEdad();
+                VentanaPrincipalP.ventanaGrafica.dispose();
+                ventanaGEdad.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             } else {
-
+                ventanaGNotas = new VentanaGNotas();
+                VentanaPrincipalP.ventanaGrafica.dispose();
+                ventanaGNotas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
         } else {
             String m = "No se han cargado los archivos :(";

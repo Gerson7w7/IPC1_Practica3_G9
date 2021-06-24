@@ -64,13 +64,13 @@ final class VentanaCMP extends JPanel implements ActionListener, WindowListener 
     @Override
     public void actionPerformed(ActionEvent e) {
         //llamamos al método que carga los archivos de la carpeta seleccionada.
-        String datos = cargaMasiva.cargaDatos(ruta.getText() + "alumnos.csv");
+        String datos = cargaMasiva.cargaDatos(ruta.getText() + "\\alumnos.csv");
         cargaMasiva.cargaAlumnos(datos);
 
-        datos = cargaMasiva.cargaDatos(ruta.getText() + "cursos.csv");
+        datos = cargaMasiva.cargaDatos(ruta.getText() + "\\cursos.csv");
         cargaMasiva.cargaCursos(datos);
 
-        datos = cargaMasiva.cargaDatos(ruta.getText() + "asignaciones.csv");
+        datos = cargaMasiva.cargaDatos(ruta.getText() + "\\asignaciones.csv");
         cargaMasiva.cargaNotas(datos);
 
         //si no se encuentra la carpeta muestra un error, de lo contrario muestra
