@@ -6,33 +6,44 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import logica.*;
+import objetos.Alumno;
+import objetos.Curso;
+import objetos.Nota;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class VentanaGNotas extends JFrame {
 
-    public VentanaGNotas() {
+    int nCodigo;
+
+    public VentanaGNotas(int nCodigo) {
+        this.nCodigo = nCodigo;
         //Inicializando la ventana y dándole dimensiones
-        VentanaGNotasP ventanaGNotasP = new VentanaGNotasP();
+        VentanaGNotasP ventanaGNotasP = new VentanaGNotasP(this.nCodigo);
         this.setBounds(250, 35, 700, 600);
         this.setTitle("Gráfica de edad");
         this.setVisible(true);
+        Thread hilo = new Thread(ventanaGNotasP);
+        hilo.start();
         this.add(ventanaGNotasP);
         this.addWindowListener(ventanaGNotasP);
     }
-
 }
 
-final class VentanaGNotasP extends JPanel implements ActionListener, WindowListener {
+final class VentanaGNotasP extends JPanel implements ActionListener, WindowListener, Runnable {
 
     JLabel labelG = new JLabel("Gráfica por ordenamiento de notas", SwingConstants.CENTER);
-    JLabel opcCodigo = new JLabel("Código del curso:");
     JButton ordenar = new JButton("Ordenar");
     JLabel opcOrdenar = new JLabel("Opciones de ordenamiento:");
     JComboBox tOrdenamiento, vOrdenamiento, aOrdenamiento;
-    JTextField codigo = new JTextField("");
-    OrdenamientoNotas ordenamientoNotas;
-    OrdenamientoNotas ordenamientoNotas2;
 
-    public VentanaGNotasP() {
+    int nCodigo;
+
+    public VentanaGNotasP(int nCodigo) {
+        this.nCodigo = nCodigo;
         initComponents();
         estetica();
     }
@@ -43,12 +54,10 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
         labelG.setBounds(100, 10, 500, 35);
         labelG.setFont(new Font("Gráficas", Font.ROMAN_BASELINE, 30));
         opcOrdenar.setBounds(40, 50, 300, 35);
-        opcCodigo.setBounds(400, 50, 300, 35);
         ordenar.setBounds(530, 80, 100, 30);
         tOrdenamiento.setBounds(40, 80, 100, 20);
         vOrdenamiento.setBounds(160, 80, 100, 20);
         aOrdenamiento.setBounds(280, 80, 100, 20);
-        codigo.setBounds(400, 80, 100, 20);
 
         this.setBackground(Color.YELLOW);
     }
@@ -58,8 +67,6 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
         this.add(labelG);
         this.add(ordenar);
         this.add(opcOrdenar);
-        this.add(codigo);
-        this.add(opcCodigo);
 
         String[] tipoO = {"Ascendente", "Descendente"};
         tOrdenamiento = new JComboBox(tipoO);
@@ -74,6 +81,63 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
         this.add(aOrdenamiento);
 
         ordenar.addActionListener(this);
+    }
+
+    public void asignacion(int sleep) {
+        try {
+            DefaultCategoryDataset datos = new DefaultCategoryDataset();
+            JFreeChart grafica = nombreCurso(nCodigo, datos);
+
+            for (Curso curso : CargaMasiva.cursos) {
+                if (curso != null && curso.getCodigo() == nCodigo) {
+                    for (Alumno alumno : CargaMasiva.alumnos) {
+                        if (alumno != null) {
+                            for (Nota nota : CargaMasiva.notas) {
+                                if (nota != null && nota.getIdAlumno() == alumno.getId() && nota.getIdCurso() == curso.getId()) {
+                                    grafica(datos, nota, grafica, alumno, sleep);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            String m = "No se ha ingresado ningún código :(";
+            JOptionPane.showMessageDialog(this, m, "Error", 2);
+        }
+    }
+
+    public void grafica(DefaultCategoryDataset datos, Nota nota, JFreeChart grafica, Alumno alumno, int sleep) {
+        datos.setValue(nota.getNota(), "Alumno", alumno.getNombre());
+        ChartPanel panelG = new ChartPanel(grafica);
+        panelG.setMouseWheelEnabled(true);
+        panelG.setPreferredSize(new Dimension(680, 410));
+        
+        this.add(panelG);
+        panelG.setBounds(0, 150, 680, 410);
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(VentanaGNotasP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public JFreeChart nombreCurso(int nCodigo, DefaultCategoryDataset datos) {
+        JFreeChart grafica = null;
+        for (Curso curso : CargaMasiva.cursos) {
+            if (curso != null && curso.getCodigo() == nCodigo) {
+                grafica = ChartFactory.createBarChart3D("Notas del curso " + curso.getNombre(),
+                        "Estudiantes", "Nota", datos, PlotOrientation.VERTICAL, true, true, false);
+                break;
+            }
+        }
+        return grafica;
+    }
+
+    @Override
+    public void run() {
+        asignacion(500);
     }
 
     //aquí implementamos los métodos de la interfaz de WindowListener
@@ -109,12 +173,7 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ordenamientoNotas = new OrdenamientoNotas(codigo);
-        Thread hilo1 = new Thread(ordenamientoNotas);
-        hilo1.start();
-        this.add(ordenamientoNotas);
-        ordenamientoNotas.setBounds(0, 150, 680, 410);
-        
+
         int sleep = 0;
         switch (vOrdenamiento.getSelectedIndex()) {
             case 0:
@@ -130,7 +189,10 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
                 break;
         }
         
-   
+        Ordenamiento ordenamiento = new Ordenamiento(this.nCodigo, sleep, 
+                (String)tOrdenamiento.getSelectedItem(), 
+                (String)aOrdenamiento.getSelectedItem());   
+        VentanaGraficaP.ventanaGNotas.dispose();
+        ordenamiento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-
 }
