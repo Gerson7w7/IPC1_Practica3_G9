@@ -2,6 +2,8 @@ package interfazGrafica;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import logica.CargaMasiva;
 import objetos.*;
@@ -13,64 +15,52 @@ public class GraficaPie extends JFrame {
     public GraficaPie() {
         //Inicializando la ventana y dándole dimensiones
         GraficaPieP graficaPieP = new GraficaPieP();
-        this.setBounds(400, 170, 800, 600);
+        this.setBounds(400, 50, 700, 500);
         this.setTitle("Gráfica de sexo");
         this.setVisible(true);
-        this.add(graficaPieP);
+        Thread hilo = new Thread(graficaPieP);
+        hilo.start();
         this.addWindowListener(graficaPieP);
-        this.pack();
-        this.repaint();
+        this.add(graficaPieP);
+
     }
+
 }
 
-final class GraficaPieP extends JPanel implements WindowListener {
+class GraficaPieP extends JPanel implements WindowListener, Runnable {
 
     int nFemenino = 1, nMasculino = 1;
 
-    public GraficaPieP() {
-        estetica();
-        initComponents();
-    }
-
-    //Aquí irá las dimensiones y colores de los componentes
-    public void estetica() {
-        this.setLayout(null);
-        this.setBackground(Color.YELLOW);
-    }
-
-    //Aquí inicializamos los componentes
-    public void initComponents() {
-        cantidad(CargaMasiva.alumnos);
-        grafica();
-    }
-
-    //Método para saber la cantidad de mujeres y hombres de alumnos
-    public void cantidad(Alumno[] alumnos) {
-        for (Alumno alumno : alumnos) {
+    //Método para saber la cantidad de mujeres y hombres de alumnos 
+    @Override
+    public void run() {
+        JFreeChart grafica = null;
+        DefaultPieDataset datos = new DefaultPieDataset();
+        grafica = ChartFactory.createPieChart("Géneros", datos, true, true, false);
+        ChartPanel panelG = new ChartPanel(grafica);
+        for (Alumno alumno : CargaMasiva.alumnos) {
             if (alumno != null) {
                 if (alumno.getGenero().equals("F")) {
                     nFemenino++;
                 } else if (alumno.getGenero().equals("M")) {
                     nMasculino++;
                 }
+                datos.setValue("Masculino", nMasculino);
+                datos.setValue("Femenino", nFemenino);
+                panelG.setMouseWheelEnabled(true);
+                panelG.setPreferredSize(new Dimension(700, 500));
+                this.setLayout(new BorderLayout());
+                this.add(panelG, BorderLayout.NORTH);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GraficaPieP.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
+
     }
-    
-    //aquí creamos la gráfica de pie y le damos dimensiones
-    public void grafica(){
-        DefaultPieDataset datos = new DefaultPieDataset();
-        datos.setValue("Masculino", nMasculino);
-        datos.setValue("Femenino", nFemenino);
-        JFreeChart grafica = ChartFactory.createPieChart("Géneros", datos, true, true, false);
-        ChartPanel panelG = new ChartPanel(grafica);
-        panelG.setMouseWheelEnabled(true);
-        panelG.setPreferredSize(new Dimension(700,500));
-        this.setLayout(new BorderLayout());
-        this.add(panelG, BorderLayout.NORTH);
-        
-    }
-    
+
     //aquí implementamos los métodos de la interfaz de WindowListener
     @Override
     public void windowOpened(WindowEvent e) {

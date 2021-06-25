@@ -2,6 +2,8 @@ package interfazGrafica;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import logica.CargaMasiva;
 import objetos.*;
@@ -16,23 +18,22 @@ public class VentanaGEdad extends JFrame {
     public VentanaGEdad() {
         //Inicializando la ventana y dándole dimensiones
         VentanaGEdadP ventanaGEdadP = new VentanaGEdadP();
-        this.setBounds(400, 170, 800, 600);
+        this.setBounds(400, 50, 700, 500);
         this.setTitle("Gráfica de edad");
         this.setVisible(true);
+        Thread hilo = new Thread(ventanaGEdadP);
+        hilo.start();
         this.add(ventanaGEdadP);
         this.addWindowListener(ventanaGEdadP);
-        this.pack();
-        this.repaint();
     }
 }
 
-final class VentanaGEdadP extends JPanel implements WindowListener {
+final class VentanaGEdadP extends JPanel implements WindowListener, Runnable {
 
     int n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, n10 = 0;
 
     public VentanaGEdadP() {
         estetica();
-        initComponents();
     }
 
     //Aquí irá las dimensiones y colores de los componentes
@@ -41,20 +42,19 @@ final class VentanaGEdadP extends JPanel implements WindowListener {
         this.setBackground(Color.YELLOW);
     }
 
-    //Aquí inicializamos los componentes
-    public void initComponents() {
-        cantidad(CargaMasiva.alumnos);
-        grafica(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10);
-    }
-
-    public void cantidad(Alumno[] alumnos) {
+    @Override
+    public void run() {
+        JFreeChart grafica = null;
+        DefaultCategoryDataset datos = new DefaultCategoryDataset();
         String[] fecha;
         int edad = 0;
-        for (Alumno alumno : alumnos) {
+        grafica = ChartFactory.createBarChart3D("Edad de estudiantes",
+                "Edad", "Estudiantes", datos, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel panelG = new ChartPanel(grafica);
+        for (Alumno alumno : CargaMasiva.alumnos) {
             if (alumno != null) {
                 fecha = alumno.getfNacimiento().split("/");
                 edad = 2021 - Integer.parseInt(fecha[2]);
-
                 if (edad >= 0 && edad <= 10) {
                     this.n1++;
                 } else if (edad > 10 && edad <= 20) {
@@ -76,51 +76,50 @@ final class VentanaGEdadP extends JPanel implements WindowListener {
                 } else if (edad > 90 && edad <= 100) {
                     this.n10++;
                 }
+
+                if (n1 != 0) {
+                    datos.setValue(n1, "0-10 años", "0-10");
+                }
+                if (n2 != 0) {
+                    datos.setValue(n2, "11-20 años", "11-20");
+                }
+                if (n3 != 0) {
+                    datos.setValue(n3, "21-30 años", "21-30");
+                }
+                if (n4 != 0) {
+                    datos.setValue(n4, "31-40 años", "31-40");
+                }
+                if (n5 != 0) {
+                    datos.setValue(n5, "41-50 años", "41-50");
+                }
+                if (n6 != 0) {
+                    datos.setValue(n6, "51-60 años", "51-60");
+                }
+                if (n7 != 0) {
+                    datos.setValue(n7, "61-70 años", "61-70");
+                }
+                if (n8 != 0) {
+                    datos.setValue(n8, "71-80 años", "71-80");
+                }
+                if (n9 != 0) {
+                    datos.setValue(n9, "81-90 años", "81-90");
+                }
+                if (n10 != 0) {
+                    datos.setValue(n10, "91-100 años", "91-100");
+                }
+
+                panelG.setMouseWheelEnabled(true);
+                panelG.setPreferredSize(new Dimension(700, 500));
+                this.setLayout(new BorderLayout());
+                this.add(panelG, BorderLayout.NORTH);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(VentanaGEdadP.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-    }
-
-    public void grafica(int n1, int n2, int n3, int n4, int n5, int n6,
-            int n7, int n8, int n9, int n10) {
-        DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        if (n1 != 0) {
-            datos.setValue(n1, "0-10 años", "0-10");
-        }
-        if (n2 != 0) {
-            datos.setValue(n2, "11-20 años", "11-20");
-        }
-        if (n3 != 0) {
-            datos.setValue(n3, "21-30 años", "21-30");
-        }
-        if (n4 != 0) {
-            datos.setValue(n4, "31-40 años", "31-40");
-        }
-        if (n5 != 0) {
-            datos.setValue(n5, "41-50 años", "41-50");
-        }
-        if (n6 != 0) {
-            datos.setValue(n6, "51-60 años", "51-60");
-        }
-        if (n7 != 0) {
-            datos.setValue(n7, "61-70 años", "61-70");
-        }
-        if (n8 != 0) {
-            datos.setValue(n8, "71-80 años", "71-80");
-        }
-        if (n9 != 0) {
-            datos.setValue(n9, "81-90 años", "81-90");
-        }
-        if (n10 != 0) {
-            datos.setValue(n10, "91-100 años", "91-100");
-        }
-
-        JFreeChart grafica = ChartFactory.createBarChart3D("Edad de estudiantes",
-                "Edad", "Estudiantes", datos, PlotOrientation.VERTICAL, true, true, false);
-        ChartPanel panelG = new ChartPanel(grafica);
-        panelG.setMouseWheelEnabled(true);
-        panelG.setPreferredSize(new Dimension(700, 500));
-        this.setLayout(new BorderLayout());
-        this.add(panelG, BorderLayout.NORTH);
     }
 
     //aquí implementamos los métodos de la interfaz de WindowListener

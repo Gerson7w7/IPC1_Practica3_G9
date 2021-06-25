@@ -2,12 +2,10 @@ package interfazGrafica;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
+import logica.*;
 
 public class VentanaGNotas extends JFrame {
 
@@ -19,8 +17,6 @@ public class VentanaGNotas extends JFrame {
         this.setVisible(true);
         this.add(ventanaGNotasP);
         this.addWindowListener(ventanaGNotasP);
-//        this.pack();
-//        this.repaint();
     }
 
 }
@@ -28,9 +24,13 @@ public class VentanaGNotas extends JFrame {
 final class VentanaGNotasP extends JPanel implements ActionListener, WindowListener {
 
     JLabel labelG = new JLabel("Gráfica por ordenamiento de notas", SwingConstants.CENTER);
+    JLabel opcCodigo = new JLabel("Código del curso:");
     JButton ordenar = new JButton("Ordenar");
     JLabel opcOrdenar = new JLabel("Opciones de ordenamiento:");
     JComboBox tOrdenamiento, vOrdenamiento, aOrdenamiento;
+    JTextField codigo = new JTextField("");
+    OrdenamientoNotas ordenamientoNotas;
+    OrdenamientoNotas ordenamientoNotas2;
 
     public VentanaGNotasP() {
         initComponents();
@@ -43,10 +43,13 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
         labelG.setBounds(100, 10, 500, 35);
         labelG.setFont(new Font("Gráficas", Font.ROMAN_BASELINE, 30));
         opcOrdenar.setBounds(40, 50, 300, 35);
-        ordenar.setBounds(500, 80, 100, 30);
+        opcCodigo.setBounds(400, 50, 300, 35);
+        ordenar.setBounds(530, 80, 100, 30);
         tOrdenamiento.setBounds(40, 80, 100, 20);
         vOrdenamiento.setBounds(160, 80, 100, 20);
         aOrdenamiento.setBounds(280, 80, 100, 20);
+        codigo.setBounds(400, 80, 100, 20);
+
         this.setBackground(Color.YELLOW);
     }
 
@@ -55,6 +58,8 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
         this.add(labelG);
         this.add(ordenar);
         this.add(opcOrdenar);
+        this.add(codigo);
+        this.add(opcCodigo);
 
         String[] tipoO = {"Ascendente", "Descendente"};
         tOrdenamiento = new JComboBox(tipoO);
@@ -104,18 +109,28 @@ final class VentanaGNotasP extends JPanel implements ActionListener, WindowListe
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-    }
-
-    public void grafica() {
-        DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        JFreeChart grafica = ChartFactory.createBarChart3D("Edad de estudiantes",
-                "Edad", "Estudiantes", datos, PlotOrientation.VERTICAL, true, true, false);
-        ChartPanel panelG = new ChartPanel(grafica);
-        panelG.setMouseWheelEnabled(true);
-        panelG.setPreferredSize(new Dimension(700, 500));
-        this.setLayout(new BorderLayout());
-        this.add(panelG, BorderLayout.NORTH);
+        ordenamientoNotas = new OrdenamientoNotas(codigo);
+        Thread hilo1 = new Thread(ordenamientoNotas);
+        hilo1.start();
+        this.add(ordenamientoNotas);
+        ordenamientoNotas.setBounds(0, 150, 680, 410);
+        
+        int sleep = 0;
+        switch (vOrdenamiento.getSelectedIndex()) {
+            case 0:
+                sleep = 100;
+                break;
+            case 1:
+                sleep = 600;
+                break;
+            case 2:
+                sleep = 1200;
+                break;
+            default:
+                break;
+        }
+        
+   
     }
 
 }
